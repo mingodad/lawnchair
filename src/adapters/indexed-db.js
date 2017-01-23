@@ -113,9 +113,10 @@ Lawnchair.adapter('indexed-db', (function(){
          var store = trans.objectStore(this.record);
 
          for (var i = 0; i < objs.length; i++) {
-          var o = objs[i];
-		  var row_key = self.keyExtraction(o);
-          store.put(o, row_key);
+		var o = objs[i];
+		var row_key = self.keyExtraction(o);
+		if("key" in o) store.put(o);
+		else store.put(o, row_key);
          }
          store.transaction.oncomplete = win;
          store.transaction.onabort = fail;

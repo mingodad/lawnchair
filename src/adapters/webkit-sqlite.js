@@ -73,7 +73,10 @@ Lawnchair.adapter('webkit-sqlite', (function () {
 
           try {
             for (var i = 0, l = objs.length; i < l; i++) {
-              insvals[i] = [JSON.stringify(objs[i]), ts, JSON.stringify(that.keyExtraction(objs[i]))];
+	      var the_key = that.keyExtraction(objs[i]);
+	      //JSON.stringify quotes strings
+	      if(typeof(the_key) !== 'string') the_key =  JSON.stringify(the_key);
+              insvals[i] = [JSON.stringify(objs[i]), ts, the_key];
             }
           } catch (e) {
             fail(e)

@@ -1,6 +1,6 @@
 Lawnchair.adapter('html5-filesystem', (function(global){
 
-    var StorageInfo = global.StorageInfo || global.webkitStorageInfo || {};
+    var StorageInfo = global.StorageInfo || navigator.webkitPersistentStorage || global.webkitStorageInfo || {};
     var TEMPORARY = global.TEMPORARY || StorageInfo.TEMPORARY;
     var PERSISTENT = global.PERSISTENT || StorageInfo.PERSISTENT;
     var BlobBuilder = global.BlobBuilder || global.WebKitBlobBuilder;
@@ -36,7 +36,7 @@ Lawnchair.adapter('html5-filesystem', (function(global){
                 msg = 'Unknown Error';
                 break;
         };
-        if ( console ) console.error( e, msg );
+        if ( console ) console.error( e, msg, e.message);
     };
 
     var ls = function( reader, callback, entries ) {
@@ -73,7 +73,8 @@ Lawnchair.adapter('html5-filesystem', (function(global){
         init: function( options, callback ) {
             var me = this;
             var error = function(e) { fail(e); if ( callback ) me.fn( me.name, callback ).call( me, me ); };
-            requestFileSystem( (options.storage === 'TEMPORARY' ? TEMPORARY : PERSISTENT), (options.size || 1024*1024*1024), function( fs ) {
+            //requestFileSystem( (options.storage === 'TEMPORARY' ? TEMPORARY : PERSISTENT), (options.size || 5*1024*1024), function( fs ) {
+            requestFileSystem( TEMPORARY, (options.size || 5*1024*1024), function( fs ) {
                 fs.root.getDirectory( options.name, {create:true}, function( directory ) {
                     filesystems[options.name] = directory;
                     if ( callback ) me.fn( me.name, callback ).call( me, me );

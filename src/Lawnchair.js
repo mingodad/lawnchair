@@ -168,7 +168,8 @@ Lawnchair.prototype = {
     },
     keyExtraction:function(object, key_path) {
         var value=null;
-        if('key' in object) {value=object['key'];}
+	if(typeof( object) === 'string') {value = object;}
+        else if('key' in object) {value=object['key'];}
         if(!value) {value=this.keyEmbellish(object);}
         return value;
     },
